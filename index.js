@@ -1,9 +1,11 @@
 const express = require("express");
 const { connection } = require("./config/db")
 const { productRouter } = require("./routes/product.routes")
-const cors = require("cors")
+const cors = require("cors");
+const { userRouter } = require("./routes/user.routes");
 require("dotenv").config();
 const app = express();
+const { adminValidate } = require("./middlewares/validator")
 
 app.use(express.json())
 app.use(cors({
@@ -14,7 +16,11 @@ app.get("/", (req, res) => {
     res.send("Welcome to the homepage")
 })
 
+app.use("/user", userRouter)
+
+app.use(adminValidate)
 app.use("/products", productRouter)
+
 
 app.listen(process.env.PORT, async () => {
     try {

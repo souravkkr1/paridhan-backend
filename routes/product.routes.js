@@ -51,14 +51,31 @@ productRouter.post('/add', async (req, res) => {
 
 
 // Update product by id
-// router.patch('//:id', getProduct, async (req, res) => {
-
-// });
+productRouter.patch('/:id', async (req, res) => {
+    const payload = req.body;
+    const {id} = req.params;
+    console.log(payload)
+    try {
+        await ProductModel.findByIdAndUpdate({ _id: id }, payload)
+        res.send("Product edited successfully")
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ "msg": "Something went wrong" })
+    }
+});
 
 // Delete product by id
-// router.delete('//:id', getProduct, async (req, res) => {
+productRouter.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await ProductModel.findByIdAndDelete({ _id: id })
+        res.send("Successfull deleted")
+    } catch (err) {
+        console.log(err)
+        res.send({ "msg": "Something went wrong" })
+    }
 
-// });
+});
 
 
 module.exports = {
